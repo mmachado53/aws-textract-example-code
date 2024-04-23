@@ -8,6 +8,7 @@ import { QueriesAndAnswers } from './models';
 function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<QueriesAndAnswers>();
+  const [imageURL, setImageURL] = useState<string>();
   const handleFilesCallback = useCallback((event:ChangeEvent<HTMLInputElement>)=>{
     const reader = new FileReader();
     setIsLoading(true);
@@ -25,9 +26,10 @@ function App() {
     };
     const files = event.target?.files;
   if(files && files.length > 0){
+    setImageURL(URL.createObjectURL(files[0]));
     reader.readAsArrayBuffer(files[0]);
   }
-  },[setResults, setIsLoading]);
+  },[setResults, setIsLoading, setImageURL]);
 
 
   return (
@@ -36,8 +38,8 @@ function App() {
       <>
       <label>Attach an image of your health insurance card:</label> <br/><br/><br/>
       <input type="file" onChange={handleFilesCallback} id="insuranceCardFile" accept="image/png, image/jpeg" />
-      { results && (
-        <ResultsView queriesAndResults={results} />
+      { results && imageURL && (
+        <ResultsView imageURL={imageURL} queriesAndResults={results} />
       )}
       </>
     )}

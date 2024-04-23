@@ -37,28 +37,32 @@ const getResultFromField = (field: Fileds, queriesAndResults : QueriesAndAnswers
   }, '');
 }
 function ResultsView(props: {
-    queriesAndResults : QueriesAndAnswers
+    queriesAndResults : QueriesAndAnswers, 
+    imageURL : string
 }){
 
-   const {queriesAndResults} = props;
+   const {queriesAndResults, imageURL} = props;
     return (<div>
         <h1>
          Results
         </h1>
+        <img style={{ maxHeight:'300px' }} src={imageURL}/>
         { resultsTemplate.map( (section) => {
          return ( <div key={section.sectionName}>
          <h2>
             {section.sectionName}
           </h2>
           {section.fields.map(field => {
-            return (<div key={field.label}>
+            return (
+            <div key={field.label}>
+              <span>{getResultFromField(field.field, queriesAndResults).length > 0 && (<>&#9989; </>) } </span>
               <span style={{ fontWeight: 'bold', paddingRight:'12px' }}>{field.label}</span>
               <span style={{ textDecoration: 'underline' }}>{getResultFromField(field.field, queriesAndResults) || '***'}</span>   
               <br/>
               <br/>
               <br/>
-            </div>)
-          })}
+            </div>
+            )})}
          </div>)
         })}
         </div>)
